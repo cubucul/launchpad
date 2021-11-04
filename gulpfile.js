@@ -15,6 +15,16 @@ function clean() {
   return del('dist');
 }
 
+function copy() {
+  return gulp.src(
+    [
+      'src/fonts/**/*.{woff2,woff}'
+    ],{
+      base: 'src'
+    })
+    .pipe(gulp.dest('dist'));
+}
+
 function html() {
   return gulp.src('src/*.html')
     .pipe(htmlmin({
@@ -78,10 +88,12 @@ function server() {
   gulp.watch('src/scripts/**/*.js', gulp.series(scripts));
   gulp.watch('src/images/sprite/**/*.svg', gulp.series(sprite));
   gulp.watch('src/images/**/*.{jpg,png,svg}', gulp.series(images));
+  gulp.watch(['src/fonts/**/*.{woff2,woff}'], gulp.series(copy));
 }
 
 export default gulp.series(
   clean,
+  copy,
   gulp.parallel(html, styles, scripts, sprite, images),
   server
 );
