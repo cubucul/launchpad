@@ -1,0 +1,11 @@
+/* Page */
+
+.page {
+  font-family: sans-serif;
+}
+
+/* Body */
+
+.page__body {
+  margin: 0;
+}
