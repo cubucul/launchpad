@@ -9,6 +9,7 @@ import terser from 'gulp-terser';
 import browserSync from 'browser-sync';
 import del from 'del';
 import svgstore from 'gulp-svgstore';
+import imagemin, { mozjpeg, optipng, svgo } from 'gulp-imagemin';
 
 function clean() {
   return del('dist');
@@ -53,6 +54,16 @@ function sprite() {
     .pipe(gulp.dest('dist/images'));
 }
 
+function images() {
+  return gulp.src('src/images/**/*.{jpg,png,svg}')
+    .pipe(imagemin([
+      mozjpeg({ progressive: true }),
+      optipng({ optimizationLevel: 3 }),
+      svgo()
+    ]))
+    .pipe(gulp.dest('dist/images'));
+}
+
 function server() {
   browserSync.init({
     ui: false,
@@ -66,10 +77,11 @@ function server() {
   gulp.watch('src/styles/**/*.css', gulp.series(styles));
   gulp.watch('src/scripts/**/*.js', gulp.series(scripts));
   gulp.watch('src/images/sprite/**/*.svg', gulp.series(sprite));
+  gulp.watch('src/images/**/*.{jpg,png,svg}', gulp.series(images));
 }
 
 export default gulp.series(
   clean,
-  gulp.parallel(html, styles, scripts, sprite),
+  gulp.parallel(html, styles, scripts, sprite, images),
   server
 );
