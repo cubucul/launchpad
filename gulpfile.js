@@ -4,6 +4,11 @@ const htmlmin = require('gulp-htmlmin');
 const babel = require('gulp-babel');
 const terser = require('gulp-terser');
 const browserSync = require('browser-sync').create();
+const del = require('del');
+
+function clean() {
+  return del('dist');
+}
 
 function html() {
   return src('src/*.html')
@@ -51,6 +56,7 @@ function server() {
 }
 
 exports.default = series(
+  clean,
   parallel(html, styles, scripts),
   server
 );
