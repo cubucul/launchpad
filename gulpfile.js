@@ -1,6 +1,8 @@
 const { src, dest } = require('gulp');
 const postcss = require('gulp-postcss');
 const htmlmin = require('gulp-htmlmin');
+const babel = require('gulp-babel');
+const terser = require('gulp-terser');
 
 function html() {
   return src('src/*.html')
@@ -24,3 +26,14 @@ function styles() {
 }
 
 exports.styles = styles;
+
+function scripts() {
+  return src('src/scripts/index.js')
+    .pipe(babel({
+      presets: ["@babel/preset-env"]
+    }))
+    .pipe(terser())
+    .pipe(dest('dist/js'));
+}
+
+exports.scripts = scripts;
