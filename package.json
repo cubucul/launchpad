@@ -3,7 +3,8 @@
   "type": "module",
   "name": "launchpad",
   "scripts": {
-    "dev": "gulp"
+    "dev": "gulp",
+    "build": "gulp build"
   },
   "devDependencies": {
     "@babel/core": "^7.16.0",

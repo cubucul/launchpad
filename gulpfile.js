@@ -109,6 +109,12 @@ function server() {
   gulp.watch(['src/fonts/**/*.{woff2,woff}'], gulp.series(copy));
 }
 
+export const build = gulp.series(
+  clean,
+  copy,
+  gulp.parallel(html, styles, scripts, sprite, images)
+);
+
 export default gulp.series(
   clean,
   copy,
