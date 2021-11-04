@@ -1,53 +1,56 @@
-const { src, dest, watch, series, parallel } = require('gulp');
-const postcss = require('gulp-postcss');
-const htmlmin = require('gulp-htmlmin');
-const babel = require('gulp-babel');
-const terser = require('gulp-terser');
-const browserSync = require('browser-sync').create();
-const del = require('del');
-const svgstore = require('gulp-svgstore');
+import gulp from 'gulp';
+import postcss from 'gulp-postcss';
+import pimport from 'postcss-import';
+import autoprefixer from 'autoprefixer';
+import csso from 'postcss-csso';
+import htmlmin from 'gulp-htmlmin';
+import babel from 'gulp-babel';
+import terser from 'gulp-terser';
+import browserSync from 'browser-sync';
+import del from 'del';
+import svgstore from 'gulp-svgstore';
 
 function clean() {
   return del('dist');
 }
 
 function html() {
-  return src('src/*.html')
+  return gulp.src('src/*.html')
     .pipe(htmlmin({
       removeComments: true,
       collapseWhitespace: true
     }))
-    .pipe(dest('dist'))
+    .pipe(gulp.dest('dist'))
     .pipe(browserSync.stream());
 }
 
 function styles() {
-  return src('src/styles/index.css')
+  return gulp.src('src/styles/index.css')
     .pipe(postcss([
-      require('postcss-import'),
-      require('autoprefixer'),
-      require('postcss-csso')
+      pimport,
+      autoprefixer,
+      csso
     ]))
-    .pipe(dest('dist/css'))
+    .pipe(gulp.dest('dist/css'))
     .pipe(browserSync.stream());
 }
 
 function scripts() {
-  return src('src/scripts/index.js')
+  return gulp.src('src/scripts/index.js')
     .pipe(babel({
       presets: ["@babel/preset-env"]
     }))
     .pipe(terser())
-    .pipe(dest('dist/js'))
+    .pipe(gulp.dest('dist/js'))
     .pipe(browserSync.stream());
 }
 
 function sprite() {
-  return src('src/images/sprite/**/*.svg')
+  return gulp.src('src/images/sprite/**/*.svg')
     .pipe(svgstore({
       inlineSvg: true
     }))
-    .pipe(dest('dist/images'));
+    .pipe(gulp.dest('dist/images'));
 }
 
 function server() {
@@ -59,14 +62,14 @@ function server() {
     }
   });
 
-  watch('src/**/*.html', series(html));
-  watch('src/styles/**/*.css', series(styles));
-  watch('src/scripts/**/*.js', series(scripts));
-  watch('src/images/sprite/**/*.svg', series(sprite));
+  gulp.watch('src/**/*.html', gulp.series(html));
+  gulp.watch('src/styles/**/*.css', gulp.series(styles));
+  gulp.watch('src/scripts/**/*.js', gulp.series(scripts));
+  gulp.watch('src/images/sprite/**/*.svg', gulp.series(sprite));
 }
 
-exports.default = series(
+export default gulp.series(
   clean,
-  parallel(html, styles, scripts, sprite),
+  gulp.parallel(html, styles, scripts, sprite),
   server
 );
