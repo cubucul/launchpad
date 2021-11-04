@@ -1,8 +1,9 @@
-const { src, dest } = require('gulp');
+const { src, dest, watch, series, parallel } = require('gulp');
 const postcss = require('gulp-postcss');
 const htmlmin = require('gulp-htmlmin');
 const babel = require('gulp-babel');
 const terser = require('gulp-terser');
+const browserSync = require('browser-sync').create();
 
 function html() {
   return src('src/*.html')
@@ -10,10 +11,9 @@ function html() {
       removeComments: true,
       collapseWhitespace: true
     }))
-    .pipe(dest('dist'));
+    .pipe(dest('dist'))
+    .pipe(browserSync.stream());
 }
-
-exports.html = html;
 
 function styles() {
   return src('src/styles/index.css')
@@ -22,10 +22,9 @@ function styles() {
       require('autoprefixer'),
       require('postcss-csso')
     ]))
-    .pipe(dest('dist/css'));
+    .pipe(dest('dist/css'))
+    .pipe(browserSync.stream());
 }
-
-exports.styles = styles;
 
 function scripts() {
   return src('src/scripts/index.js')
@@ -33,7 +32,25 @@ function scripts() {
       presets: ["@babel/preset-env"]
     }))
     .pipe(terser())
-    .pipe(dest('dist/js'));
+    .pipe(dest('dist/js'))
+    .pipe(browserSync.stream());
 }
 
-exports.scripts = scripts;
+function server() {
+  browserSync.init({
+    ui: false,
+    notify: false,
+    server: {
+      baseDir: 'dist'
+    }
+  });
+
+  watch('src/**/*.html', series(html));
+  watch('src/styles/**/*.css', series(styles));
+  watch('src/scripts/**/*.js', series(scripts));
+}
+
+exports.default = series(
+  parallel(html, styles, scripts),
+  server
+);
