@@ -11,9 +11,13 @@ import del from 'del';
 import svgstore from 'gulp-svgstore';
 import imagemin, { mozjpeg, optipng, svgo } from 'gulp-imagemin';
 
+// Clean
+
 function clean() {
   return del('dist');
 }
+
+// Copy
 
 function copy() {
   return gulp.src(
@@ -25,6 +29,8 @@ function copy() {
     .pipe(gulp.dest('dist'));
 }
 
+// HTML
+
 function html() {
   return gulp.src('src/*.html')
     .pipe(htmlmin({
@@ -34,6 +40,8 @@ function html() {
     .pipe(gulp.dest('dist'))
     .pipe(browserSync.stream());
 }
+
+// Styles
 
 function styles() {
   return gulp.src('src/styles/index.css')
@@ -46,6 +54,8 @@ function styles() {
     .pipe(browserSync.stream());
 }
 
+// Scripts
+
 function scripts() {
   return gulp.src('src/scripts/index.js')
     .pipe(babel({
@@ -56,6 +66,8 @@ function scripts() {
     .pipe(browserSync.stream());
 }
 
+// Sprite
+
 function sprite() {
   return gulp.src('src/images/sprite/**/*.svg')
     .pipe(svgstore({
@@ -63,6 +75,8 @@ function sprite() {
     }))
     .pipe(gulp.dest('dist/images'));
 }
+
+// Images
 
 function images() {
   return gulp.src('src/images/**/*.{jpg,png,svg}')
@@ -74,6 +88,8 @@ function images() {
     .pipe(gulp.dest('dist/images'));
 }
 
+// Server
+
 function server() {
   browserSync.init({
     ui: false,
@@ -82,6 +98,8 @@ function server() {
       baseDir: 'dist'
     }
   });
+
+  // Watchers
 
   gulp.watch('src/**/*.html', gulp.series(html));
   gulp.watch('src/styles/**/*.css', gulp.series(styles));
