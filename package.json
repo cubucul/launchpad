@@ -5,6 +5,10 @@
     "dev": "gulp"
   },
   "devDependencies": {
-    "gulp": "^4.0.2"
+    "autoprefixer": "^10.4.0",
+    "gulp": "^4.0.2",
+    "gulp-postcss": "^9.0.1",
+    "postcss-csso": "^5.0.1",
+    "postcss-import": "^14.0.2"
   }
 }
