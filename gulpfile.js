@@ -5,6 +5,7 @@ const babel = require('gulp-babel');
 const terser = require('gulp-terser');
 const browserSync = require('browser-sync').create();
 const del = require('del');
+const svgstore = require('gulp-svgstore');
 
 function clean() {
   return del('dist');
@@ -41,6 +42,14 @@ function scripts() {
     .pipe(browserSync.stream());
 }
 
+function sprite() {
+  return src('src/images/sprite/**/*.svg')
+    .pipe(svgstore({
+      inlineSvg: true
+    }))
+    .pipe(dest('dist/images'));
+}
+
 function server() {
   browserSync.init({
     ui: false,
@@ -53,10 +62,11 @@ function server() {
   watch('src/**/*.html', series(html));
   watch('src/styles/**/*.css', series(styles));
   watch('src/scripts/**/*.js', series(scripts));
+  watch('src/images/sprite/**/*.svg', series(sprite));
 }
 
 exports.default = series(
   clean,
-  parallel(html, styles, scripts),
+  parallel(html, styles, scripts, sprite),
   server
 );
