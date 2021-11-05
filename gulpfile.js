@@ -10,6 +10,7 @@ import browserSync from 'browser-sync';
 import del from 'del';
 import svgstore from 'gulp-svgstore';
 import imagemin, { mozjpeg, optipng, svgo } from 'gulp-imagemin';
+import sourcemaps from 'gulp-sourcemaps';
 
 // Clean
 
@@ -45,11 +46,13 @@ function html() {
 
 function styles() {
   return gulp.src('src/styles/index.css')
+    .pipe(sourcemaps.init())
     .pipe(postcss([
       pimport,
       autoprefixer,
       csso
     ]))
+    .pipe(sourcemaps.write('.'))
     .pipe(gulp.dest('dist/css'))
     .pipe(browserSync.stream());
 }
