@@ -7,10 +7,10 @@
     "build": "gulp build"
   },
   "devDependencies": {
-    "@babel/core": "^7.16.0",
-    "@babel/preset-env": "^7.16.0",
-    "autoprefixer": "^10.4.0",
-    "browser-sync": "^2.27.7",
+    "@babel/core": "^7.17.8",
+    "@babel/preset-env": "^7.16.11",
+    "autoprefixer": "^10.4.4",
+    "browser-sync": "^2.27.9",
     "del": "^6.0.0",
     "gulp": "^4.0.2",
     "gulp-babel": "^8.0.0",
@@ -20,7 +20,8 @@
     "gulp-sourcemaps": "^3.0.0",
     "gulp-svgstore": "^9.0.0",
     "gulp-terser": "^2.1.0",
+    "postcss": "^8.4.12",
     "postcss-csso": "^6.0.0",
-    "postcss-import": "^14.0.2"
+    "postcss-import": "^14.1.0"
   }
 }
